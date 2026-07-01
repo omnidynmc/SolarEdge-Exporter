@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  REGISTRY: hangar.hackand.ninja
+  IMAGE_NAME: solaredge/exporter
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, hangar]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Short SHA
+        run: echo "SHA7=$(echo ${GITHUB_SHA} | cut -c1-7)" >> "$GITHUB_ENV"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main-${{ env.SHA7 }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main-latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
