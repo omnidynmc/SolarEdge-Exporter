@@ -12,7 +12,13 @@ env:
 jobs:
   build:
     if: github.ref == 'refs/heads/main'
-    runs-on: [self-hosted, hangar]
+    # Internal runner: this job pushes to Harbor with its own robot credential
+    # and deploys to the dynmc cluster, both of which need LAN reach.
+    # BARE `hangar`, not the two-label form `[self-hosted, hangar]`: that form
+    # matches only the classic LXC runners, which are being deleted. ARC
+    # scale-set runners are matched by scale set NAME and carry no `self-hosted`
+    # label, so a job left on the two-label form queues forever.
+    runs-on: hangar
     steps:
       - uses: actions/checkout@v4
       - name: Short SHA
