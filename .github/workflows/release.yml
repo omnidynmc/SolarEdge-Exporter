@@ -6,7 +6,7 @@ on:
 jobs:
   release-linux-amd64:
     name: release linux/amd64
-    runs-on: ubuntu-latest
+    runs-on: hangar
     steps:
     - uses: actions/checkout@v2
     - uses: wangyoucao577/go-release-action@v1.11
@@ -17,7 +17,7 @@ jobs:
         extra_files: LICENSE.md README.md
   release-linux-arm64:
     name: release linux/arm64
-    runs-on: ubuntu-latest
+    runs-on: hangar
     steps:
     - uses: actions/checkout@v2
     - uses: wangyoucao577/go-release-action@v1.11
@@ -28,7 +28,7 @@ jobs:
         extra_files: LICENSE.md README.md
   release-linux-macos:
     name: release linux/macos
-    runs-on: ubuntu-latest
+    runs-on: hangar
     steps:
     - uses: actions/checkout@v2
     - uses: wangyoucao577/go-release-action@v1.11
@@ -39,7 +39,7 @@ jobs:
         extra_files: LICENSE.md README.md
   release-linux-windows:
     name: release linux/windows
-    runs-on: ubuntu-latest
+    runs-on: hangar
     steps:
     - uses: actions/checkout@v2
     - uses: wangyoucao577/go-release-action@v1.11
